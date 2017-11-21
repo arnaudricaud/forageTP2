@@ -81,11 +81,11 @@ public:
 	void FillWords()
 	{
 		ifstream wordFile;
-		wordFile.open("../Data/words.txt");
+		wordFile.open(WORDS_FILE);
 
 		if(!wordFile)
 		{
-			cerr<<"Error while loading doc " << "words.txt" << endl;
+			cerr<<"Error while loading doc " << WORDS_FILE << endl;
 			return;
 		}
 
@@ -204,6 +204,7 @@ public:
 
 	void WriteNewWordsForEachDoc()
 	{
+		vector<int> wordId;
 		cout << "Write new words"<< endl;;
 		ofstream tfidfFile;
 
@@ -217,6 +218,10 @@ public:
 			{
 				tfidfFile << nbDoc << " "<< values.first << " " << values.second << "\r\n";
 				written = true;
+				if(find(wordId.begin(), wordId.end(), values.first) == wordId.end())
+				{
+					wordId.push_back(values.first);
+				}
 			}
 			if(!written)
 			{
@@ -224,6 +229,8 @@ public:
 			}
 			nbDoc++;
 		}
+
+		cout << wordId.size() << " mots différents" << endl;
 
 		tfidfFile.close();
 	}
