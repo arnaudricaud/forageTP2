@@ -85,14 +85,6 @@ public:
 		currentDoc.clear();
 		sum=0;
 
-		for(auto &elem : this->wordFreqCorpus)
-		{
-			if(elem.second != 0)
-			{
-				elem.second = log(this->nbDocs / elem.second);
-			}
-		}
-
 		infile.close();
 	}
 
@@ -118,7 +110,18 @@ public:
 		wordFile.close();
 	}
 
-	void ComputeValues()
+	void ComputeIdfs()
+	{
+		for(auto &elem : this->wordFreqCorpus)
+		{
+			if(elem.second != 0)
+			{
+				elem.second = log(this->nbDocs / elem.second);
+			}
+		}
+	}
+
+	void ComputeTfIdfs()
 	{
 		cout<<"Compute TF * IDF" << endl;
 		for(auto &vecteur : this->docTermFrequency)
@@ -137,7 +140,7 @@ public:
 	{
 		for(auto &document : this->tfidfValues)
 		{
-			int wordIdToKept = GetWordIdToKept(percent);
+			//int wordIdToKept = GetWordIdsToKept(percent, document);
 		}
 	}
 };
@@ -148,5 +151,6 @@ int main()
 	TfIdf* tfidf = new TfIdf();
 	tfidf->FillWords();
 	tfidf->ReadInputFiles();
-	tfidf->ComputeValues();
+	tfidf->ComputeIdfs();
+	tfidf->ComputeTfIdfs();
 }
