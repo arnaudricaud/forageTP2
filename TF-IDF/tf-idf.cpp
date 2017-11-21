@@ -19,6 +19,7 @@ private:
 	string inputFilePart1;
 	string inputFilePart2;
 	vector< map<int, int> > docTermFrequency;
+	vector< map<int, int> > tfidfValues;
 	map<int, int> wordFreqCorpus;
 
 public:
@@ -48,6 +49,7 @@ public:
 
 	void ParseFile(string filename)
 	{
+		cout << "Loading " << filename <<endl;
 		ifstream infile;
 		infile.open(filename.c_str());
 
@@ -79,9 +81,16 @@ public:
 			this->wordFreqCorpus[wordId]++;;
 		} while(infile >> docId >> wordId >> wordFreq);
 
+		this->docTermFrequency.push_back(currentDoc);
+		currentDoc.clear();
+		sum=0;
+
 		for(auto &elem : this->wordFreqCorpus)
 		{
-			elem.second = log(this->nbDocs / elem.second);
+			if(elem.second != 0)
+			{
+				elem.second = log(this->nbDocs / elem.second);
+			}
 		}
 
 		infile.close();
@@ -111,14 +120,24 @@ public:
 
 	void ComputeValues()
 	{
-		int nbKept = 0;
-		cout<<"ComputeValues";
+		cout<<"Compute TF * IDF" << endl;
 		for(auto &vecteur : this->docTermFrequency)
 		{
+			map<int, int> tfIdfForDoc;
 			for(auto &element : vecteur)
 			{
-
+				int tfIdfVal = element.second * this->wordFreqCorpus[element.first];
+				tfIdfForDoc.emplace(element.first, tfIdfVal);
 			}
+			tfidfValues.push_back(tfIdfForDoc);
+		}
+	}
+
+	void KeptOnlyGivenPercentOfTfIdf(int percent)
+	{
+		for(auto &document : this->tfidfValues)
+		{
+			int wordIdToKept = GetWordIdToKept(percent);
 		}
 	}
 };
