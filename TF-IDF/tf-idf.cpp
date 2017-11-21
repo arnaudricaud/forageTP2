@@ -7,17 +7,13 @@
 #include <algorithm>
 #include <map>
 #include <climits>
+#include "Constantes.h"
 
 using namespace std;
 
 class TfIdf
 {
 private:
-	string finalDocName;
-	int nbDocs;
-	int nbWordsInitial;
-	vector< vector<int> >* docwords;
-	vector<string>* words;
 	string inputFilePart1;
 	string inputFilePart2;
 	vector< map<int, int> > docTermFrequency;
@@ -27,13 +23,7 @@ private:
 public:
 	TfIdf()
 	{
-		this->nbDocs = 128804;
-		this->nbWordsInitial = 30799;
-		this->docwords = new vector< vector<int> >();
-		this->words = new vector<string>();
-		this->inputFilePart1 = "../Data/nsfabs_part";
-		this->inputFilePart2 = "_out/docwords.txt";
-		this->finalDocName = "../Data/tfidfs.txt";
+
 	}
 
 	~TfIdf();
@@ -43,7 +33,7 @@ public:
 		for(int i=1; i<=3; i++)
 		{
 			ostringstream oss;
-			oss << this->inputFilePart1 << i << this->inputFilePart2;
+			oss << INPUT_PATH_PART1 << i << INPUT_PATH_PART2;
 			string filename = oss.str();
 			ParseFile(filename);
 		}
@@ -67,26 +57,16 @@ public:
 			return;
 		}
 
-		int docId, wordId, wordFreq, i=0, sum=0;
+		int docId, wordId, wordFreq;
 		infile >> docId >> wordId >> wordFreq;
 		int lastIdDoc = docId;
 		map<int, int> currentDoc;
 		do {
-			//cout<< "Current: " << docId << " Last : " << lastIdDoc << endl;
 			if(docId != lastIdDoc)
 			{
-				//cout << "on change" << endl;
-				/*
-					Term frequency instead of raw count
-				for (map<int,int>::iterator it=currentDoc->begin(); it!=currentDoc->end(); ++it)
-				{
-					it->second /= sum;
-				}*/
 				this->docTermFrequency.push_back(currentDoc);
 				currentDoc.clear();
-				sum=0;
 			}
-			sum += wordFreq;
 			currentDoc.emplace(wordId, wordFreq);
 			this->wordFreqCorpus[wordId]++;;
 			lastIdDoc = docId;
@@ -94,7 +74,6 @@ public:
 
 		this->docTermFrequency.push_back(currentDoc);
 		currentDoc.clear();
-		sum=0;
 
 		infile.close();
 	}
@@ -112,9 +91,9 @@ public:
 
 		int idWord;
 		string word;
+
 		while(wordFile >> idWord >> word)
 		{
-			this->words->push_back(word);
 			this->wordFreqCorpus[idWord = 0];
 		}
 
@@ -127,7 +106,7 @@ public:
 		{
 			if(elem.second != 0)
 			{
-				elem.second = log(this->nbDocs / elem.second);
+				elem.second = log(NB_DOCS / elem.second);
 			}
 		}
 	}
@@ -138,10 +117,8 @@ public:
 		map<int, int> tfIdfForDoc;
 		for(auto &vecteur : this->docTermFrequency)
 		{
-			//cout << "New Document" << endl;
 			for(auto &element : vecteur)
 			{
-				//cout << element.first << " => " << element.second << endl;
 				int tfIdfVal = element.second * this->wordFreqCorpus[element.first];
 				tfIdfForDoc.emplace(element.first, tfIdfVal);
 			}
@@ -230,7 +207,7 @@ public:
 		cout << "Write new words"<< endl;;
 		ofstream tfidfFile;
 
-		tfidfFile.open(this->finalDocName.c_str());
+		tfidfFile.open(FINAL_TFIDF_FILE);
 
 		int nbDoc = 1;
 		for(auto &document : this->tfidfValues)
