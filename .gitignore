@@ -1,3 +1,5 @@
 Data
 /Data
 /TF-IDF/out
+*.o
+main
