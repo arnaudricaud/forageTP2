@@ -1,34 +1,17 @@
-#include <iostream>
-#include <string>
-#include <math.h>
-#include <sstream>
-#include <fstream>
-#include <vector>
-#include <algorithm>
-#include <map>
-#include <climits>
 #include "Constantes.h"
+#include "tfidf.h"
 
 using namespace std;
 
-class TfIdf
-{
-private:
-	string inputFilePart1;
-	string inputFilePart2;
-	vector< map<int, int> > docTermFrequency;
-	vector< map<int, int> > tfidfValues;
-	map<int, int> wordFreqCorpus;
 
-public:
-	TfIdf()
+
+	TfIdf::TfIdf()
 	{
 
 	}
 
-	~TfIdf();
 
-	void ReadInputFiles()
+	void TfIdf::ReadInputFiles()
 	{
 		for(int i=1; i<=3; i++)
 		{
@@ -39,13 +22,13 @@ public:
 		}
 	}
 
-	void pause()
+	void TfIdf::pause()
 	{
 	   std::cin.sync(); // Flush The Input Buffer Just In Case
 	   std::cin.ignore(); // There's No Need To Actually Store The Users Input
 	}
 
-	void ParseFile(string filename)
+	void TfIdf::ParseFile(string filename)
 	{
 		cout << "Loading " << filename <<endl;
 		ifstream infile;
@@ -78,7 +61,7 @@ public:
 		infile.close();
 	}
 
-	void FillWords()
+	void TfIdf::FillWords()
 	{
 		ifstream wordFile;
 		wordFile.open(WORDS_FILE);
@@ -100,7 +83,7 @@ public:
 		wordFile.close();
 	}
 
-	void ComputeIdfs()
+	void TfIdf::ComputeIdfs()
 	{
 		for(auto &elem : this->wordFreqCorpus)
 		{
@@ -111,7 +94,7 @@ public:
 		}
 	}
 
-	void ComputeTfIdfs()
+	void TfIdf::ComputeTfIdfs()
 	{
 		cout<<"Compute TF * IDF" << endl;
 		map<int, int> tfIdfForDoc;
@@ -127,7 +110,7 @@ public:
 		}
 	}
 
-	void RemoveWords(int nbEcartTypeDiff, bool canThrowText)
+	void TfIdf::RemoveWords(int nbEcartTypeDiff, bool canThrowText)
 	{
 		cout << "Remove words" << endl;
 
@@ -167,7 +150,7 @@ public:
 		}
 	}
 
-	int FindMaxIndexInMap(map<int, int> map)
+	int TfIdf::FindMaxIndexInMap(map<int, int> map)
 	{
 		int max = INT_MIN;
 		int indexTokeep = 0;
@@ -183,7 +166,7 @@ public:
 		return indexTokeep;
 	}
 
-	void GetMoyAndEcartType(map<int, int> serie, double* moy, double* ecartType)
+	void TfIdf::GetMoyAndEcartType(map<int, int> serie, double* moy, double* ecartType)
 	{
 		double sum = 0;
 		int nb =0;
@@ -202,7 +185,7 @@ public:
 		*ecartType = sqrt((1.0/nb) * sumEcartType);
 	}
 
-	void WriteNewWordsForEachDoc()
+	void TfIdf::WriteNewWordsForEachDoc()
 	{
 		vector<int> wordId;
 		cout << "Write new words"<< endl;;
@@ -234,16 +217,3 @@ public:
 
 		tfidfFile.close();
 	}
-};
-
-
-int main()
-{
-	TfIdf* tfidf = new TfIdf();
-	tfidf->FillWords();
-	tfidf->ReadInputFiles();
-	tfidf->ComputeIdfs();
-	tfidf->ComputeTfIdfs();
-	tfidf->RemoveWords(2, false);
-	tfidf->WriteNewWordsForEachDoc();
-}
