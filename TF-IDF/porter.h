@@ -4,13 +4,17 @@
 #include <sstream>
 #include <fstream>
 #include <algorithm>
+#include <vector>
+#include "porterWord.h"
 
 using namespace std;
 
 class Porter
 {
 private:
+	vector<PorterWord*> porterWords;
 	string wordFileName;
+
 public:
 	Porter(string);
 	void applyPorter(string);

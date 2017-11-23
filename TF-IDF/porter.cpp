@@ -1,5 +1,6 @@
 #include "porter.h"
 
+
 using namespace std;
 
 
@@ -24,24 +25,30 @@ using namespace std;
 		string word;
 		int consonant;
 		string porterWord;
+		bool newWord;
 
 		while (infile >> idWord >> word) {
-			cout << "Id: " << idWord << endl << "Mot: " << word << endl;
-			
 			//Comptage du nombre de pseudo-syllabes:
+			newWord = true;
 			consonant = getConsonantNb(word);
-			cout <<"Nb Syllabes: " << consonant << endl;
-
-
+			//On récupère le mot de porter
 			porterWord = porterProcessStep1(word, consonant);
-
-
-
-
-
-
-			system("pause");
+			
+			//On regarde s'il existe déjà dans nos mots, si c'est le cas, on ajoute l'id du mot original à la liste.
+			for (int i = 0; i < porterWords.size(); i++) {
+				if (porterWord.compare(porterWords[i]->getWord()) == 0) {
+					porterWords[i]->addOldId(idWord);
+					newWord = false;
+					break;
+				}
+			}
+			//Sinon, on créé un nouveau mot!
+			if (newWord) {
+				porterWords.push_back(new PorterWord(porterWord));
+			}
 		}
+		cout << "nb de mots après Porter: " << porterWords.size() << endl;
+			system("pause");
 
 	}
 
@@ -92,15 +99,20 @@ using namespace std;
 
 	bool Porter::cvcEnd(string word) {
 		int size = word.length();
-		if (wordEndWith(word, "w") || wordEndWith(word, "x")) {
-			//Si la dernière consonne est w ou x:
+		if(size >= 3){
+			if (wordEndWith(word, "w") || wordEndWith(word, "x")) {
+				//Si la dernière consonne est w ou x:
+				return false;
+			}
+			else if (isVowel(word[size-1]) || !isVowel(word[size - 2]) || isVowel(word[size - 3])) {
+				//Si on a pas ce qu'il faut (!CVC)
+				return false;
+			}
+			return true;
+		}
+		else {
 			return false;
 		}
-		else if (isVowel(word[size-1]) || !isVowel(word[size - 2]) || isVowel(word[size - 3])) {
-			//Si on a pas ce qu'il faut (!CVC)
-			return false;
-		}
-		return true;
 	}
 
 	bool Porter::wordEndWith(string word, string end) {
@@ -179,7 +191,7 @@ using namespace std;
 				}  else if (wordEndWith(porterWord, "ed") && vowelInWord(porterWord, 2)) {
 					//Si le mot fini par ED et qu'on a plus d'une syllabe => On supprime le ED!
 					porterWord = porterWord.substr(0, size - 2);
-
+					size = size - 2;
 					/*	AT->ATE
 					BL->BLE
 					IZ->IZE
@@ -211,7 +223,6 @@ using namespace std;
 			}
 				
 		}
-	
-		cout << word << " -> " << porterWord << endl;
+		//cout << word << " -> " << porterWord << endl;
 		return porterWord;
 	}
