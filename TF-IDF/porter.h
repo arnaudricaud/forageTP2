@@ -1,6 +1,7 @@
 #pragma once
-#include <string.h>
+#include <string>
 #include <iostream>
+#include <map>
 #include <sstream>
 #include <fstream>
 #include <algorithm>
@@ -12,6 +13,7 @@ using namespace std;
 class Porter
 {
 private:
+	map<int, string> words;
 	vector<PorterWord*> porterWords;
 	string wordFileName;
 
@@ -26,4 +28,3 @@ public:
 	bool wordEndWith(string word, string end);
 	string porterProcessStep1(string word, int nbconsonant);
 };
-

@@ -27,17 +27,28 @@ void Porter::applyPorter(string outputFileName)
 	string porterWord;
 	bool newWord;
 
-	while (infile >> idWord >> word) {
+	while (infile >> idWord >> word)
+	{
+		this->words.emplace(idWord, word);
+	}
+
+	infile.close();
+
+	for(auto& wordInput : this->words)
+	{
+		string currentWord = wordInput.second;
+		int currentId = wordInput.first;
+
 		//Comptage du nombre de pseudo-syllabes:
 		newWord = true;
-		consonant = getConsonantNb(word);
+		consonant = getConsonantNb(currentWord);
 		//On r�cup�re le mot de porter
-		porterWord = porterProcessStep1(word, consonant);
+		porterWord = porterProcessStep1(currentWord, consonant);
 
 		//On regarde s'il existe d�j� dans nos mots, si c'est le cas, on ajoute l'id du mot original � la liste.
 		for (int i = 0; i < porterWords.size(); i++) {
 			if (porterWord.compare(porterWords[i]->getWord()) == 0) {
-				porterWords[i]->addOldId(idWord);
+				porterWords[i]->addOldId(currentId);
 				newWord = false;
 				break;
 			}
@@ -46,10 +57,10 @@ void Porter::applyPorter(string outputFileName)
 		if (newWord) {
 			porterWords.push_back(new PorterWord(porterWord));
 		}
-	}
-	cout << "nb de mots apr�s Porter: " << porterWords.size() << endl;
-		system("pause");
 
+	}
+
+	cout << "nb de mots apr�s Porter: " << porterWords.size() << endl;
 }
 
 int Porter::getConsonantNb(string word)
