@@ -1,5 +1,5 @@
 #pragma once
-#include <string.h>
+#include <string>
 #include <vector>
 
 
@@ -19,4 +19,3 @@ public:
 	vector<int> getOldIds();
 	void addOldId(int id);
 };
-
