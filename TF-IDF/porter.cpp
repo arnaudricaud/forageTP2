@@ -12,6 +12,7 @@ Porter::Porter(string fileName)
 void Porter::applyPorter(string outputFileName)
 {
 	//Ouverture du fichier "word"
+	cout << "Ouverture du fichier words" << endl;
 	ifstream infile;
 	infile.open(wordFileName.c_str());
 	if (!infile)
@@ -33,6 +34,8 @@ void Porter::applyPorter(string outputFileName)
 	}
 
 	infile.close();
+
+	cout << "Fermeture du fichier words, lecture terminee " << endl;
 
 	for(auto& wordInput : this->words)
 	{
@@ -260,7 +263,12 @@ void Porter::writeFinalWords(string outFile)
 				output << " ";
 			}
 		}
-		output << "," << porterWord->getWord() << "\r\n";
+		output << "," << porterWord->getWord();
+
+		if(porterWord != this->porterWords.back())
+		{
+			output  << "\r\n";
+		}
 
 		i++;
 	}

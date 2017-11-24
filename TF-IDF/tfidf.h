@@ -9,6 +9,8 @@
 #include <iterator>
 #include <map>
 #include <climits>
+#include "porterWord.h"
+#include "Constantes.h"
 
 using namespace std;
 
@@ -20,6 +22,7 @@ private:
 	vector< map<int, int> > docTermFrequency;
 	vector< map<int, int> > tfidfValues;
 	map<int, int> wordFreqCorpus;
+	map<PorterWord*, int> wordPorterFreqCorpus;
 
 public:
 	TfIdf();

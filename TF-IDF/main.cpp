@@ -10,7 +10,6 @@ int main()
 	porter->applyPorter(PORTER_WORDS_OUTPUT);
 	*/
 
-
 	TfIdf* tfidf = new TfIdf();
 	tfidf->FillWords(true);
 	/*

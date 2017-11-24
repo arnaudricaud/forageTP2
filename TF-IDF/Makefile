@@ -9,7 +9,7 @@ main: main.o tfidf.o porter.o porterWord.o
 main.o: main.cpp tfidf.h porter.h
 		$(CXX) $(CXXFLAGS) -c main.cpp
 
-tfidf.o: tfidf.h
+tfidf.o: tfidf.h porterWord.h
 
 porter.o: porter.h
 

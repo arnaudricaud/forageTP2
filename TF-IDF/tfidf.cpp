@@ -1,4 +1,3 @@
-#include "Constantes.h"
 #include "tfidf.h"
 
 using namespace std;
@@ -94,12 +93,17 @@ using namespace std;
 				vector<string> splited;
 				split(line.c_str(), splited, ',');
 				int newId = stoi(splited[0]);
-
+				PorterWord* newPorterWord = new PorterWord(splited[2], newId);
+				vector<string> oldsIdsString;
+				split(splited[1].c_str(), oldsIdsString, ' ');
+				for(string oldId : oldsIdsString)
+				{
+					newPorterWord->addOldId(stoi(oldId));
+				}
 			}
 		}
 		else
 		{
-
 			wordFile.open(WORDS_FILE);
 
 			if(!wordFile)
