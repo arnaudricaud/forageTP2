@@ -6,3 +6,4 @@
 #define FINAL_TFIDF_FILE "../Data/Final_TfIdf_Output.txt"
 
 #define WORDS_FILE "../Data/words.txt"
+#define PORTER_WORDS_OUTPUT "../Data/wordsAfterPorter.txt"

@@ -14,6 +14,7 @@ private:
 public:
 
 	PorterWord(string porterWord);
+	PorterWord(string, int);
 	~PorterWord();
 	string getWord();
 	vector<int> getOldIds();

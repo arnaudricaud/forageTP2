@@ -6,6 +6,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <iterator>
 #include <map>
 #include <climits>
 
@@ -25,7 +26,7 @@ public:
 	void ReadInputFiles();
 	void pause();
 	void ParseFile(string filename);
-	void FillWords();
+	void FillWords(bool);
 	void ComputeIdfs();
 	void ComputeTfIdfs();
 	void RemoveWords(int nbEcartTypeDiff, bool canThrowText);

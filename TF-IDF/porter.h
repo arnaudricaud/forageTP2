@@ -27,4 +27,5 @@ public:
 	bool cvcEnd(string word);
 	bool wordEndWith(string word, string end);
 	string porterProcessStep1(string word, int nbconsonant);
+	void writeFinalWords(string);
 };

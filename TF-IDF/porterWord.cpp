@@ -10,6 +10,12 @@ PorterWord::PorterWord(string porterWord)
 	word = porterWord;
 }
 
+PorterWord::PorterWord(string porterWord, int id)
+{
+	word = porterWord;
+	oldIds.push_back(id);
+}
+
 
 PorterWord::~PorterWord()
 {

@@ -55,12 +55,14 @@ void Porter::applyPorter(string outputFileName)
 		}
 		//Sinon, on cr�� un nouveau mot!
 		if (newWord) {
-			porterWords.push_back(new PorterWord(porterWord));
+			porterWords.push_back(new PorterWord(porterWord, currentId));
 		}
 
 	}
 
 	cout << "nb de mots apr�s Porter: " << porterWords.size() << endl;
+
+	writeFinalWords(outputFileName);
 }
 
 int Porter::getConsonantNb(string word)
@@ -236,4 +238,32 @@ string Porter::porterProcessStep1(string word, int nbconsonant) {
 	}
 	//cout << word << " -> " << porterWord << endl;
 	return porterWord;
+}
+
+void Porter::writeFinalWords(string outFile)
+{
+	cout << "Writing porter result to new file..." << endl;
+
+	ofstream output;
+	output.open(outFile);
+
+	int i = 1;
+	for(PorterWord* porterWord : this->porterWords)
+	{
+		output << i << ",";
+		vector<int> oldIds = porterWord->getOldIds();
+		for(int oldId : oldIds)
+		{
+			output << oldId;
+			if(oldId != oldIds.back())
+			{
+				output << " ";
+			}
+		}
+		output << "," << porterWord->getWord() << "\r\n";
+
+		i++;
+	}
+
+	output.close();
 }

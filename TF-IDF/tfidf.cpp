@@ -61,23 +61,61 @@ using namespace std;
 		infile.close();
 	}
 
-	void TfIdf::FillWords()
+	template <class Container>
+	void split(const std::string& str, Container& cont, char delim = ' ')
 	{
+	    stringstream ss(str);
+	    string token;
+	    while (getline(ss, token, delim)) {
+	        cont.push_back(token);
+	    }
+	}
+
+	void TfIdf::FillWords(bool porterWords)
+	{
+		cout << "Reading word file..." <<endl;
 		ifstream wordFile;
-		wordFile.open(WORDS_FILE);
-
-		if(!wordFile)
+		if(porterWords)
 		{
-			cerr<<"Error while loading doc " << WORDS_FILE << endl;
-			return;
+			wordFile.open(PORTER_WORDS_OUTPUT);
+
+			if(!wordFile)
+			{
+				cerr<<"Error while loading doc " << PORTER_WORDS_OUTPUT << endl;
+				return;
+			}
+
+			string line;
+			while(!wordFile.eof())
+			{
+				line.clear();
+				getline(wordFile, line);
+
+				vector<string> splited;
+				split(line.c_str(), splited, ',');
+				int newId = stoi(splited[0]);
+
+			}
 		}
-
-		int idWord;
-		string word;
-
-		while(wordFile >> idWord >> word)
+		else
 		{
-			this->wordFreqCorpus[idWord = 0];
+
+			wordFile.open(WORDS_FILE);
+
+			if(!wordFile)
+			{
+				cerr<<"Error while loading doc " << WORDS_FILE << endl;
+				return;
+			}
+
+			int idWord;
+			string word;
+
+			while(wordFile >> idWord >> word)
+			{
+				this->wordFreqCorpus[idWord = 0];
+			}
+
 		}
 
 		wordFile.close();
