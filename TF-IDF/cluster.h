@@ -8,7 +8,6 @@
 #include <map>
 #include "Constantes.h"
 #include "document.h"
-#include "cluster.h"
 
 using namespace std;
 
@@ -34,6 +33,5 @@ public:
 	void clearCenter();
 	void clearDocs();
 	void addDoc(Document* docId);
-	
-};
 
+};

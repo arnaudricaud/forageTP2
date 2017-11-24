@@ -13,11 +13,11 @@ Kmeans::Kmeans(string inputFile, int clusternb)
 		cerr << "Error while loading doc " << inputFile << endl;
 		return;
 	}
-	
+
 	int idDoc, idWord, freqWord;
 	int j  = 0;
 	int nbDocs = 0;
-	//On créé les docs auquels on associe chaque mots!
+	//On crï¿½ï¿½ les docs auquels on associe chaque mots!
 	while (infile >> idDoc >> idWord >> freqWord)
 	{
 		if (idDoc != j) {
@@ -32,14 +32,14 @@ Kmeans::Kmeans(string inputFile, int clusternb)
 		clusters.push_back(new Cluster(i));
 	}
 	cout << "Clusters created..." << endl;
-	//Pour chaque texte, je l'associe à un cluster aléatoirement
+	//Pour chaque texte, je l'associe ï¿½ un cluster alï¿½atoirement
 	int randCluster;
 	srand(time(NULL));
 	for (int i = 0; i < docs.size(); i++) {
 		randCluster = rand() % clusternb;
 		clusters[randCluster]->addDoc(docs[i]);
 	}
-	//On termine en calculant le premier centre de chaque cluster 
+	//On termine en calculant le premier centre de chaque cluster
 	calcClustersCenters();
 	cout << "First center calculations has ended..." << endl;
 }
@@ -52,17 +52,23 @@ void Kmeans::applyKmeans()
 {
 	bool clusterStabilized = false;
 	cout << "Begining kmeans calculation..." << endl;
+	int it = 0;
 	while (!clusterStabilized) {
 		//On retire les documents des clusters:
 		clearAllClusters();
-		//On réassigne les textes au clusters:
+		cout <<"clusters vides" << endl;
+		//On rï¿½assigne les textes au clusters:
 		assignTextToClusters();
+		cout <<"clusters remplis" << endl;
 		//On recalcule tous les centres:
 		calcClustersCenters();
+		cout <<"Nouveaux centres ok" << endl;
 		//On check si on a atteint notre condition d'arret:
 		clusterStabilized = areClusterStabilized();
+
+		cout << "Iteration " << ++it << endl;
 	}
-	//Une fois terminé, on écrit le résultat dans un fichier
+	//Une fois terminï¿½, on ï¿½crit le rï¿½sultat dans un fichier
 	cout << "Writting results..." << endl;
 	writeResult();
 	cout << "Kmeans Done!" << endl;
@@ -70,13 +76,17 @@ void Kmeans::applyKmeans()
 
 //On prends les doc et on les associes aux cluster les plus proches
 void Kmeans::assignTextToClusters() {
-	map<int, double> currentCenter;
 	int closestCluster = 0;
 	double maxScore = 0;
 	double currentScore;
 	for (int i = 0; i < docs.size(); i++) {
+		if(i % 100 == 0)
+		{
+			cout << i << " textes assignes a un cluster" << endl;
+		}
 		for (int j = 0; j < clusters.size(); j++) {
-			currentScore = calcPoidText(i, j);
+			map<int, double> currentCenter = centroids[j];//clusters.at(j)->getCenter();
+			currentScore = calcPoidText(i, j, currentCenter);
 			if (currentScore > maxScore) {
 				maxScore = currentScore;
 				closestCluster = j;
@@ -96,7 +106,8 @@ double Kmeans::calcPoidText(int docNb, int clusterNb) {
 		if (clusters[clusterNb]->center.find(currentWords[i]) != clusters[clusterNb]->center.end()) {
 			currentScore += clusters[clusterNb]->center[currentWords[i]];
 		}
-	}
+
+	}*/
 	return currentScore;
 }
 
@@ -128,8 +139,8 @@ void Kmeans::writeResult()
 	kmeanResultFile.open(FINAL_KMEANS_FILE);
 	int j = 0;
 	for (int i = 0; i < clusters.size(); i++) {
-		kmeanResultFile << "Cluster n°" << i << "\r\n";
-		kmeanResultFile << "Documents associés: ";
+		kmeanResultFile << "Cluster nï¿½" << i << "\r\n";
+		kmeanResultFile << "Documents associï¿½s: ";
 		vector<Document*> clusterDocs = clusters[i]->getDocs();
 		for (j = 0; j < clusterDocs.size()-1; j++){
 			kmeanResultFile << clusterDocs[j]<<", ";
