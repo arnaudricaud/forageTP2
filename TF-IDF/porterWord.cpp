@@ -35,3 +35,12 @@ void PorterWord::addOldId(int id)
 {
 	oldIds.push_back(id);
 }
+
+bool PorterWord::idInOldIds(int id)
+{
+	if(find(oldIds.begin(), oldIds.end(), id) != oldIds.end())
+	{
+		return true;
+	}
+	return false;
+}

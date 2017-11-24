@@ -22,17 +22,18 @@ private:
 	vector< map<int, int> > docTermFrequency;
 	vector< map<int, int> > tfidfValues;
 	map<int, int> wordFreqCorpus;
-	map<PorterWord*, int> wordPorterFreqCorpus;
+	map<int, int> oldIdToNewId;
+	bool usePorterWords;
 
 public:
-	TfIdf();
+	TfIdf(bool);
 	void ReadInputFiles();
 	void pause();
 	void ParseFile(string filename);
-	void FillWords(bool);
+	void FillWords();
 	void ComputeIdfs();
 	void ComputeTfIdfs();
-	void RemoveWords(int nbEcartTypeDiff, bool canThrowText);
+	void RemoveWords(double nbEcartTypeDiff, bool canThrowText);
 	int FindMaxIndexInMap(map<int, int> map);
 	void GetMoyAndEcartType(map<int, int> serie, double* moy, double* ecartType);
 	void WriteNewWordsForEachDoc();

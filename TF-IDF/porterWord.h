@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <algorithm>
 
 
 using namespace std;
@@ -19,4 +20,5 @@ public:
 	string getWord();
 	vector<int> getOldIds();
 	void addOldId(int id);
+	bool idInOldIds(int id);
 };
