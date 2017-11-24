@@ -85,8 +85,8 @@ void Kmeans::assignTextToClusters() {
 			cout << i << " textes assignes a un cluster" << endl;
 		}
 		for (int j = 0; j < clusters.size(); j++) {
-			map<int, double> currentCenter = centroids[j];//clusters.at(j)->getCenter();
-			currentScore = calcPoidText(i, j, currentCenter);
+			//map<int, double> currentCenter = centroids[j];//clusters.at(j)->getCenter();
+			currentScore = calcPoidText(i, j);
 			if (currentScore > maxScore) {
 				maxScore = currentScore;
 				closestCluster = j;
@@ -98,16 +98,16 @@ void Kmeans::assignTextToClusters() {
 
 //On prends les doc et on les associes aux cluster les plus proches
 double Kmeans::calcPoidText(int docNb, int clusterNb) {
-	
+
 	vector<int> currentWords = docs[docNb]->getWords();
 	double currentScore = 0;
-	
+
 	for (int i = 0; i < currentWords.size(); i++) {
 		if (clusters[clusterNb]->center.find(currentWords[i]) != clusters[clusterNb]->center.end()) {
 			currentScore += clusters[clusterNb]->center[currentWords[i]];
 		}
 
-	}*/
+	}
 	return currentScore;
 }
 
