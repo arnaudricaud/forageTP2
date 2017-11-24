@@ -4,6 +4,7 @@
 
 Kmeans::Kmeans(string inputFile, int clusternb)
 {
+	cout << "K-means begin..." << endl;
 	cout << "Opening TF-IDF file..." << endl;
 	ifstream infile;
 	infile.open(inputFile);
@@ -27,7 +28,6 @@ Kmeans::Kmeans(string inputFile, int clusternb)
 		docs[nbDocs-1]->addWord(idWord);
 	}
 	cout << "Documents created..." << endl;
-	
 	for (int i = 0; i < clusternb; i++) {
 		clusters.push_back(new Cluster(i));
 	}
@@ -60,7 +60,6 @@ void Kmeans::applyKmeans()
 		//On recalcule tous les centres:
 		calcClustersCenters();
 		//On check si on a atteint notre condition d'arret:
-
 		clusterStabilized = areClusterStabilized();
 	}
 	//Une fois terminé, on écrit le résultat dans un fichier
@@ -75,7 +74,6 @@ void Kmeans::assignTextToClusters() {
 	int closestCluster = 0;
 	double maxScore = 0;
 	double currentScore;
-
 	for (int i = 0; i < docs.size(); i++) {
 		for (int j = 0; j < clusters.size(); j++) {
 			currentScore = calcPoidText(i, j);
@@ -90,13 +88,13 @@ void Kmeans::assignTextToClusters() {
 
 //On prends les doc et on les associes aux cluster les plus proches
 double Kmeans::calcPoidText(int docNb, int clusterNb) {
-	map<int, double> currentCenter = clusters[clusterNb]->getCenter();
+	
 	vector<int> currentWords = docs[docNb]->getWords();
 	double currentScore = 0;
 	
 	for (int i = 0; i < currentWords.size(); i++) {
-		if (currentCenter.find(currentWords[i]) != currentCenter.end()) {
-			currentScore += currentCenter[currentWords[i]];
+		if (clusters[clusterNb]->center.find(currentWords[i]) != clusters[clusterNb]->center.end()) {
+			currentScore += clusters[clusterNb]->center[currentWords[i]];
 		}
 	}
 	return currentScore;

@@ -18,9 +18,11 @@ private:
 	int id;
 	vector<Document*> docs;
 	map<int, double> oldCenter;
-	map<int, double> center; //int => id des mots!, double => freq/nb docs
+	
 
 public:
+	map<int, double> center; //int => id des mots!, double => freq/nb docs
+
 	Cluster(int clusterId);
 	~Cluster();
 
