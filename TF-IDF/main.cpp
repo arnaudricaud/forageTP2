@@ -5,10 +5,10 @@
 
 int main()
 {
-	/*
-	Porter* porter = new Porter(WORDS_FILE);
-	porter->applyPorter(PORTER_WORDS_OUTPUT);
-	*/
+	
+	/*Porter* porter = new Porter(WORDS_FILE);
+	porter->applyPorter(PORTER_WORDS_OUTPUT);*/
+	
 
 	TfIdf* tfidf = new TfIdf(true);
 	tfidf->FillWords();
