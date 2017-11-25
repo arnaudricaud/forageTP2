@@ -143,7 +143,7 @@ void Kmeans::writeResult()
 	for (int i = 0; i < clusters.size(); i++) {
 		kmeanResultFile <<"\r\n"<< "Cluster " << i << "\r\n";
 		kmeanResultFile << "\r\n" << "10 meilleurs mots associés : ";
-		for (int j = 0; j < 10; j++) {
+		for (int j = 0; j < 30; j++) {
 			bestWord = 0;
 			bestWeight = 0;
 			for (auto key : clusters[i]->center) {
@@ -152,6 +152,7 @@ void Kmeans::writeResult()
 				}
 			}
 			kmeanResultFile << bestWord << ", ";
+			clusters[i]->center.erase(bestWord);
 		}
 		kmeanResultFile << "\r\n";
 		kmeanResultFile << "Documents associes: ";
