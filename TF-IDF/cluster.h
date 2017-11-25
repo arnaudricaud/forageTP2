@@ -17,7 +17,7 @@ private:
 	int id;
 	
 	map<int, double> oldCenter;
-	
+	double totalWeight;
 
 public:
 	map<int, double> center; //int => id des mots!, double => freq/nb docs
@@ -34,5 +34,6 @@ public:
 	void clearCenter();
 	void clearDocs();
 	void addDoc(Document* docId);
+	double getTotalWeight();
 
 };

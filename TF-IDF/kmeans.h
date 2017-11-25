@@ -25,7 +25,7 @@ public:
 	void applyKmeans();
 
 	void assignTextToClusters();
-	double calcPoidText(int docNb, int clusterNb);
+	double calcDistText(int docNb, int clusterNb);
 	bool areClusterStabilized();
 	void calcClustersCenters();
 	void clearAllClusters();

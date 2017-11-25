@@ -1,7 +1,6 @@
 #include "kmeans.h"
 
 
-
 Kmeans::Kmeans(string inputFile, int clusternb)
 {
 	cout << "K-means begin..." << endl;
@@ -39,6 +38,7 @@ Kmeans::Kmeans(string inputFile, int clusternb)
 		randCluster = rand() % clusternb;
 		clusters[randCluster]->addDoc(docs[i]);
 	}
+
 	//On termine en calculant le premier centre de chaque cluster
 	calcClustersCenters();
 	cout << "First center calculations has ended..." << endl;
@@ -64,7 +64,11 @@ void Kmeans::applyKmeans()
 		clusterStabilized = areClusterStabilized();
 
 		cout << "Iteration " << ++it << endl;
+		for (int i = 0; i < clusters.size(); i++) {
+			cout << "Cluster " << i << endl << "nbDoc :" << clusters[i]->docs.size() << endl;
+		}
 	}
+
 	//Une fois termin�, on �crit le r�sultat dans un fichier
 	cout << "Writting results..." << endl;
 	writeResult();
@@ -74,13 +78,13 @@ void Kmeans::applyKmeans()
 //On prends les doc et on les associes aux cluster les plus proches
 void Kmeans::assignTextToClusters() {
 	int closestCluster = 0;
-	double maxScore = 0;
-	double currentScore;
+	double currentDist;
 	for (int i = 0; i < docs.size(); i++) {
+		double minDist = 1;
 		for (int j = 0; j < clusters.size(); j++) {
-			currentScore = calcPoidText(i, j);
-			if (currentScore > maxScore) {
-				maxScore = currentScore;
+			currentDist = calcDistText(i, j);
+			if (currentDist < minDist) {
+				minDist = currentDist;
 				closestCluster = j;
 			}
 		}
@@ -89,17 +93,21 @@ void Kmeans::assignTextToClusters() {
 }
 
 //On prends les doc et on les associes aux cluster les plus proches
-double Kmeans::calcPoidText(int docNb, int clusterNb) {
+double Kmeans::calcDistText(int docNb, int clusterNb) {
 
 	vector<int> currentWords = docs[docNb]->getWords();
-	double currentScore = 0;
-
+	double poidsTotal = clusters[clusterNb]->getTotalWeight();
+	double poidsSameWords = 0;
+	
+	// Pour toutes les valeurs du cluster:
 	for (int i = 0; i < currentWords.size(); i++) {
 		if (clusters[clusterNb]->center.find(currentWords[i]) != clusters[clusterNb]->center.end()) {
-			currentScore += clusters[clusterNb]->center[currentWords[i]];
+			poidsSameWords += clusters[clusterNb]->center[currentWords[i]];
 		}
 	}
-	return currentScore;
+
+	double distance = (poidsTotal - poidsSameWords) / poidsTotal;
+	return distance;
 }
 
 bool Kmeans::areClusterStabilized() {

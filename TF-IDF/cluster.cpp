@@ -37,6 +37,7 @@ void Cluster::calculateCenter()
 {
 	oldCenter = center;
 	clearCenter();
+	totalWeight = 0;
 	//Pour chaque doc du cluster:
 	for (int i = 0; i < docs.size(); i++) {
 		vector<int> words = docs[i]->getWords();
@@ -46,9 +47,11 @@ void Cluster::calculateCenter()
 			if (center.find(key) != center.end()) {
 				//Si le mot est déjà enregistré, augmente son importance (pondérée!)
 				center[key] += 10000 / (double)docs.size();
+				totalWeight += 10000 / (double)docs.size();
 			} else {
 				//Sinon on créé le mot
-				center.emplace(key, 0);
+				center.emplace(key, 10000 / (double)docs.size());
+				totalWeight += 10000 / (double)docs.size();
 			}
 		}
 	}
@@ -68,4 +71,8 @@ void Cluster::clearDocs()
 void Cluster::addDoc(Document* doc)
 {
 	docs.push_back(doc);
+}
+
+double Cluster::getTotalWeight() {
+	return totalWeight;
 }
