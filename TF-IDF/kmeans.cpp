@@ -99,7 +99,7 @@ double Kmeans::calcDistText(int docNb, int clusterNb) {
 	vector<int> currentWords = docs[docNb]->getWords();
 	double poidsTotal = clusters[clusterNb]->getTotalWeight();
 	double poidsSameWords = 0;
-	
+
 	// Pour toutes les valeurs du cluster:
 	for (int i = 0; i < currentWords.size(); i++) {
 		if (clusters[clusterNb]->center.find(currentWords[i]) != clusters[clusterNb]->center.end()) {
@@ -149,6 +149,7 @@ void Kmeans::writeResult()
 			for (auto key : clusters[i]->center) {
 				if (key.second > bestWeight) {
 					bestWord = key.first;
+					bestWeight = key.second;
 				}
 			}
 			kmeanResultFile << bestWord << ", ";
