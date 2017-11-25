@@ -99,7 +99,7 @@ double Kmeans::calcDistText(int docNb, int clusterNb) {
 	vector<int> currentWords = docs[docNb]->getWords();
 	double poidsTotal = clusters[clusterNb]->getTotalWeight();
 	double poidsSameWords = 0;
-
+	
 	// Pour toutes les valeurs du cluster:
 	for (int i = 0; i < currentWords.size(); i++) {
 		if (clusters[clusterNb]->center.find(currentWords[i]) != clusters[clusterNb]->center.end()) {
@@ -139,10 +139,11 @@ void Kmeans::writeResult()
 	kmeanResultFile.open(FINAL_KMEANS_FILE);
 	int j = 0;
 	int bestWord = 0;
-	int bestWeight = 0;
+	double bestWeight = 0;
+	bool firstWord;
 	for (int i = 0; i < clusters.size(); i++) {
-		kmeanResultFile <<"\r\n"<< "Cluster " << i << "\r\n";
-		kmeanResultFile << "\r\n" << "10 meilleurs mots associés : ";
+		kmeanResultFile << "Cluster " << i << "\r\n";
+		firstWord = true;
 		for (int j = 0; j < 30; j++) {
 			bestWord = 0;
 			bestWeight = 0;
@@ -152,13 +153,27 @@ void Kmeans::writeResult()
 					bestWeight = key.second;
 				}
 			}
-			kmeanResultFile << bestWord << ", ";
+			if (firstWord) {
+				kmeanResultFile<< bestWord << ":" << bestWeight;
+				firstWord = false;
+			}
+			else {
+				kmeanResultFile << "," << bestWord << ":" << bestWeight;
+			}
 			clusters[i]->center.erase(bestWord);
 		}
+
 		kmeanResultFile << "\r\n";
-		kmeanResultFile << "Documents associes: ";
+		firstWord = true;
 		for (j = 0; j < clusters[i]->docs.size(); j++){
-			kmeanResultFile << clusters[i]->docs[j]->getId()<<", ";
+			if (firstWord) {
+				kmeanResultFile << clusters[i]->docs[j]->getId();
+				firstWord = false;
+			}
+			else {
+				kmeanResultFile << "," << clusters[i]->docs[j]->getId();
+			}
 		}
+		kmeanResultFile << "\r\n";
 	}
 }
