@@ -10,14 +10,11 @@ int main()
 	porter->applyPorter(PORTER_WORDS_OUTPUT);
 	*/
 
-	TfIdf* tfidf = new TfIdf();
-	tfidf->FillWords(true);
-	/*
+	TfIdf* tfidf = new TfIdf(true);
+	tfidf->FillWords();
 	tfidf->ReadInputFiles();
 	tfidf->ComputeIdfs();
 	tfidf->ComputeTfIdfs();
-	tfidf->RemoveWords(2, false);
+	tfidf->RemoveWords(1.5, false);
 	tfidf->WriteNewWordsForEachDoc();
-	*/
-
 }

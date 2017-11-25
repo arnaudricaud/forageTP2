@@ -4,9 +4,9 @@ using namespace std;
 
 
 
-	TfIdf::TfIdf()
+	TfIdf::TfIdf(bool loadPorterWords)
 	{
-
+		this->usePorterWords = loadPorterWords;
 	}
 
 
@@ -49,8 +49,16 @@ using namespace std;
 				this->docTermFrequency.push_back(currentDoc);
 				currentDoc.clear();
 			}
-			currentDoc.emplace(wordId, wordFreq);
-			this->wordFreqCorpus[wordId]++;;
+			if(this->usePorterWords)
+			{
+				this->wordFreqCorpus[this->oldIdToNewId.find(wordId)->second]++;
+				currentDoc[this->oldIdToNewId.find(wordId)->second] += wordFreq;
+			}
+			else
+			{
+				this->wordFreqCorpus[wordId]++;
+				currentDoc.emplace(wordId, wordFreq);
+			}
 			lastIdDoc = docId;
 		} while(infile >> docId >> wordId >> wordFreq);
 
@@ -70,12 +78,14 @@ using namespace std;
 	    }
 	}
 
-	void TfIdf::FillWords(bool porterWords)
+	void TfIdf::FillWords()
 	{
-		cout << "Reading word file..." <<endl;
 		ifstream wordFile;
-		if(porterWords)
+
+		if(this->usePorterWords)
 		{
+			cout << "Reading porter output file " << endl;
+
 			wordFile.open(PORTER_WORDS_OUTPUT);
 
 			if(!wordFile)
@@ -93,17 +103,21 @@ using namespace std;
 				vector<string> splited;
 				split(line.c_str(), splited, ',');
 				int newId = stoi(splited[0]);
-				PorterWord* newPorterWord = new PorterWord(splited[2], newId);
 				vector<string> oldsIdsString;
 				split(splited[1].c_str(), oldsIdsString, ' ');
 				for(string oldId : oldsIdsString)
 				{
-					newPorterWord->addOldId(stoi(oldId));
+					this->oldIdToNewId.emplace(stoi(oldId), newId);
 				}
+
+				this->wordFreqCorpus[newId = 0];
 			}
+			wordFile.close();
 		}
 		else
 		{
+			cout << "Reading original word file..." <<endl;
+
 			wordFile.open(WORDS_FILE);
 
 			if(!wordFile)
@@ -120,9 +134,8 @@ using namespace std;
 				this->wordFreqCorpus[idWord = 0];
 			}
 
+			wordFile.close();
 		}
-
-		wordFile.close();
 	}
 
 	void TfIdf::ComputeIdfs()
@@ -152,7 +165,7 @@ using namespace std;
 		}
 	}
 
-	void TfIdf::RemoveWords(int nbEcartTypeDiff, bool canThrowText)
+	void TfIdf::RemoveWords(double nbEcartTypeDiff, bool canThrowText)
 	{
 		cout << "Remove words" << endl;
 
