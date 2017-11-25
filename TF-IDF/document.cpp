@@ -18,6 +18,10 @@ void Document::addWord(int wordId)
 	wordFreq.push_back(wordId);
 }
 
+int Document::getId() {
+	return id;
+}
+
 vector<int> Document::getWords() {
 	return wordFreq;
 }

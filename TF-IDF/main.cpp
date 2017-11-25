@@ -6,10 +6,10 @@
 
 int main()
 {
-
+	
 	/*Porter* porter = new Porter(WORDS_FILE);
 	porter->applyPorter(PORTER_WORDS_OUTPUT);*/
-
+	
 	/*TfIdf* tfidf = new TfIdf(true);
 	tfidf->FillWords();
 	tfidf->ReadInputFiles();
@@ -18,7 +18,7 @@ int main()
 	tfidf->RemoveWords(1.5, false);
 	tfidf->WriteNewWordsForEachDoc();*/
 
-	Kmeans* kmeans = new Kmeans(FINAL_TFIDF_FILE, 100);
+	Kmeans* kmeans = new Kmeans(FINAL_TFIDF_FILE, 5);
 	kmeans->applyKmeans();
 	system("pause");
 }

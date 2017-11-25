@@ -12,6 +12,7 @@ public:
 	Document(int idDoc);
 	~Document();
 	void addWord(int id);
+	int getId();
 	vector<int> getWords();
 };
 

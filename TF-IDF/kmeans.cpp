@@ -134,7 +134,7 @@ void Kmeans::writeResult()
 		kmeanResultFile <<"\r\n"<< "Cluster " << i << "\r\n";
 		kmeanResultFile << "Documents associes: ";
 		for (j = 0; j < clusters[i]->docs.size(); j++){
-			kmeanResultFile << clusters[i]->docs[j]<<", ";
+			kmeanResultFile << clusters[i]->docs[j]->getId()<<", ";
 		}
 	}
 }
