@@ -98,7 +98,6 @@ double Kmeans::calcPoidText(int docNb, int clusterNb) {
 		if (clusters[clusterNb]->center.find(currentWords[i]) != clusters[clusterNb]->center.end()) {
 			currentScore += clusters[clusterNb]->center[currentWords[i]];
 		}
-
 	}
 	return currentScore;
 }

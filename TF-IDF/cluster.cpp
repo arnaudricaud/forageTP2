@@ -45,7 +45,7 @@ void Cluster::calculateCenter()
 			int key = words[j];
 			if (center.find(key) != center.end()) {
 				//Si le mot est déjà enregistré, augmente son importance (pondérée!)
-				center[key] += 1 / docs.size();
+				center[key] += 10000 / (double)docs.size();
 			} else {
 				//Sinon on créé le mot
 				center.emplace(key, 0);
