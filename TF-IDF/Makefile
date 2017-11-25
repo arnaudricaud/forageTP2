@@ -15,7 +15,7 @@ porter.o: porter.h
 
 porterWord.o: porterWord.h
 
-cah.o: cah.h cluster.h
+cah.o: cah.h cluster.h document.h
 
 cluster.o: cluster.h
 

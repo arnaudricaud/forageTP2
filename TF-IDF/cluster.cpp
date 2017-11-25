@@ -41,21 +41,48 @@ void Cluster::calculateCenter()
 	//Pour chaque doc du cluster:
 	for (int i = 0; i < docs.size(); i++) {
 		vector<int> words = docs[i]->getWords();
-		//Pour chaque mot on l'ajoute dans la liste de mots: 
+		//Pour chaque mot on l'ajoute dans la liste de mots:
 		for (int j = 0; j < words.size(); j++) {
 			int key = words[j];
 			if (center.find(key) != center.end()) {
-				//Si le mot est déjà enregistré, augmente son importance (pondérée!)
-				center[key] += 10000 / (double)docs.size();
-				totalWeight += 10000 / (double)docs.size();
+				//Si le mot est dï¿½jï¿½ enregistrï¿½, augmente son importance (pondï¿½rï¿½e!)
+				center[key] += 1 / (double)docs.size();
+				totalWeight += 1 / (double)docs.size();
 			} else {
-				//Sinon on créé le mot
-				center.emplace(key, 10000 / (double)docs.size());
-				totalWeight += 10000 / (double)docs.size();
+				//Sinon on crï¿½ï¿½ le mot
+				center.emplace(key, 1 / (double)docs.size());
+				totalWeight += 1 / (double)docs.size();
 			}
 		}
 	}
 
+}
+
+vector<int> Cluster::getWords()
+{
+	return this->words;
+}
+
+void Cluster::addDocCah(Document* doc)
+{
+	docs.push_back(doc);
+	for(int wordId : doc->getWords())
+	{
+		this->words.push_back(wordId);
+	}
+}
+
+double Cluster::getDistanceTo(Cluster* compareTo)
+{
+	double distance = 0;
+	for(int wordId : compareTo->getWords())
+	{
+		if(find(this->words.begin(), this->words.end(), wordId) != this->words.end())
+		{
+			distance += 1;
+		}
+	}
+	return distance;
 }
 
 void Cluster::clearCenter()
