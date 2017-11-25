@@ -1,4 +1,5 @@
 #include "kmeans.h"
+#include <chrono>
 
 
 Kmeans::Kmeans(string inputFile, int clusternb)
@@ -64,8 +65,8 @@ void Kmeans::applyKmeans()
 		clusterStabilized = areClusterStabilized();
 
 		cout << "Iteration " << ++it << endl;
-		for (int i = 0; i < clusters.size(); i++) {
-			cout << "Cluster " << i << endl << "nbDoc :" << clusters[i]->docs.size() << endl;
+		if (it % 10 == 0) {
+			writeResult();
 		}
 	}
 
@@ -137,8 +138,22 @@ void Kmeans::writeResult()
 	ofstream kmeanResultFile;
 	kmeanResultFile.open(FINAL_KMEANS_FILE);
 	int j = 0;
+	int bestWord = 0;
+	int bestWeight = 0;
 	for (int i = 0; i < clusters.size(); i++) {
 		kmeanResultFile <<"\r\n"<< "Cluster " << i << "\r\n";
+		kmeanResultFile << "\r\n" << "10 meilleurs mots associés : ";
+		for (int j = 0; j < 10; j++) {
+			bestWord = 0;
+			bestWeight = 0;
+			for (auto key : clusters[i]->center) {
+				if (key.second > bestWeight) {
+					bestWord = key.first;
+				}
+			}
+			kmeanResultFile << bestWord << ", ";
+		}
+		kmeanResultFile << "\r\n";
 		kmeanResultFile << "Documents associes: ";
 		for (j = 0; j < clusters[i]->docs.size(); j++){
 			kmeanResultFile << clusters[i]->docs[j]->getId()<<", ";
