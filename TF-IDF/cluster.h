@@ -17,6 +17,7 @@ class Cluster
 private:
 	int id;
 	vector<Document*> docs;
+	map<int, double> oldCenter;
 	map<int, double> center; //int => id des mots!, double => freq/nb docs
 
 public:
@@ -25,6 +26,7 @@ public:
 
 	int getId();
 	map<int, double> getCenter();
+	map<int, double> getOldCenter();
 	vector<Document*> getDocs();
 	void calculateCenter();
 	void clearCenter();

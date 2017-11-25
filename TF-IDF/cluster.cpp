@@ -23,6 +23,11 @@ map<int, double > Cluster::getCenter()
 	return center;
 }
 
+map<int, double> Cluster::getOldCenter()
+{
+	return oldCenter;
+}
+
 vector<Document*> Cluster::getDocs()
 {
 	return docs;
@@ -30,6 +35,7 @@ vector<Document*> Cluster::getDocs()
 
 void Cluster::calculateCenter()
 {
+	oldCenter = center;
 	clearCenter();
 	//Pour chaque doc du cluster:
 	for (int i = 0; i < docs.size(); i++) {

@@ -5,6 +5,7 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include <time.h>
 #include "Constantes.h"
 #include "document.h"
 #include "cluster.h"
@@ -21,9 +22,13 @@ private:
 public:
 	Kmeans(string inputFile, int clusterNb);
 	~Kmeans();
-	void applyKmeans(string outputFile);
+	void applyKmeans();
 
-
-
+	void assignTextToClusters();
+	double calcPoidText(int docNb, int clusterNb);
+	bool areClusterStabilized();
+	void calcClustersCenters();
+	void clearAllClusters();
+	void writeResult();
 };
 
